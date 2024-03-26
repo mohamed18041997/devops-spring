@@ -2,6 +2,24 @@ version: '3'
 
 services:
 
+  mysql:
+    container_name: mysql
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+        reservations:
+          cpus: '0.25'
+          memory: 250M
+
   sonarqube:
     container_name: sonarqube
     image: sonarqube:lts
@@ -12,6 +30,7 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
+    restart: always
     deploy:
       resources:
         limits:
@@ -28,6 +47,7 @@ services:
       - 8081:8081
     volumes:
       - nexus-data:/nexus-data
+    restart: always
     deploy:
       resources:
         limits:
@@ -42,6 +62,7 @@ services:
     image: prom/prometheus:latest
     ports:
       - 9090:9090
+    restart: always
     volumes:
       - prometheus_data:/prometheus
     command:
@@ -60,6 +81,7 @@ services:
     image: grafana/grafana:latest
     ports:
       - 3000:3000
+    restart: always
     volumes:
       - grafana_data:/var/lib/grafana
     deploy:
@@ -78,6 +100,7 @@ services:
     image: prom/alertmanager:latest
     ports:
       - 9093:9093
+    restart: always
     volumes:
       - alertmanager_data:/alertmanager
     command:
