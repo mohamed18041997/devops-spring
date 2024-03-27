@@ -2,15 +2,34 @@ version: '3'
 
 services:
 
+#  spring:
+#    container_name: spring
+#    image: spring:test
+#    restart: always
+#    ports:
+#      - 8082:8082
+#    depends_on:
+#      - mysql
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 500M
+#        reservations:
+#          cpus: '0.25'
+#          memory: 250M
+
   mysql:
     container_name: mysql
     image: mysql
     # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
     # (this is just an example, not intended to be a production configuration)
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    ports:
+      - 3306:3306
+    #restart: always
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: 'root'
     deploy:
       resources:
         limits:
@@ -30,15 +49,15 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
-    restart: always
+    #restart: always
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 500M
+          cpus: '1'
+          memory: 700M
         reservations:
           cpus: '0.25'
-          memory: 2500M
+          memory: 250M
 
   nexus:
     container_name: nexus
@@ -47,12 +66,12 @@ services:
       - 8081:8081
     volumes:
       - nexus-data:/nexus-data
-    restart: always
+    #restart: always
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 500M
+          cpus: '1'
+          memory: 750M
         reservations:
           cpus: '0.25'
           memory: 250M
@@ -62,7 +81,7 @@ services:
     image: prom/prometheus:latest
     ports:
       - 9090:9090
-    restart: always
+    #restart: always
     volumes:
       - prometheus_data:/prometheus
     command:
@@ -81,7 +100,7 @@ services:
     image: grafana/grafana:latest
     ports:
       - 3000:3000
-    restart: always
+    #restart: always
     volumes:
       - grafana_data:/var/lib/grafana
     deploy:
@@ -100,7 +119,7 @@ services:
     image: prom/alertmanager:latest
     ports:
       - 9093:9093
-    restart: always
+    #restart: always
     volumes:
       - alertmanager_data:/alertmanager
     command:
