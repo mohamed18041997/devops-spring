@@ -27,7 +27,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
-    #restart: always
+#    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
     deploy:
@@ -45,11 +45,11 @@ services:
     ports:
       - 9000:9000
       - 9092:9092
-    volumes:
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_logs:/opt/sonarqube/logs
-    #restart: always
+#    volumes:
+#      - sonarqube_data:/opt/sonarqube/data
+#      - sonarqube_extensions:/opt/sonarqube/extensions
+#      - sonarqube_logs:/opt/sonarqube/logs
+#    restart: always
     deploy:
       resources:
         limits:
@@ -64,9 +64,9 @@ services:
     image: sonatype/nexus3
     ports:
       - 8081:8081
-    volumes:
-      - nexus-data:/nexus-data
-    #restart: always
+#    volumes:
+#      - nexus-data:/nexus-data
+#    restart: always
     deploy:
       resources:
         limits:
@@ -81,7 +81,7 @@ services:
     image: prom/prometheus:latest
     ports:
       - 9090:9090
-    #restart: always
+#    restart: always
     volumes:
       - prometheus_data:/prometheus
     command:
@@ -143,3 +143,4 @@ volumes:
   prometheus_data: {}
   grafana_data: {}
   alertmanager_data: {}
+# docker run -d -p 8081:8081 --name nexuswitoutvars sonatype/nexus3 => curl http://localhost:8081/nexus/service/local/status
