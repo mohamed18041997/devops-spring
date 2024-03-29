@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:lts
+    ports:
+      - 9000:9000
+      - 9092:9092
+    restart: always
+
+  nexus:
+    container_name: nexus
+    image: sonatype/nexus3
+    ports:
+      - 8081:8081
+    restart: always
+# docker run -d -p 8081:8081 --name nexuswitoutvars sonatype/nexus3 => curl http://localhost:8081/nexus/service/local/status
