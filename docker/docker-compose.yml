@@ -55,6 +55,7 @@ services:
     restart: always
     volumes:
       - alertmanager_data:/alertmanager
+      - ./alermanager/config.yml:/etc/alertmanager/alertmanager.yml:rw,Z
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
     depends_on:
