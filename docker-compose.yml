@@ -1,5 +1,7 @@
 version: '3'
-
+networks:
+  monitor-net:
+    external: true
 services:
 
   spring:
@@ -10,7 +12,8 @@ services:
       - 8082:8082
     depends_on:
       - mysql
-
+    networks:
+      - monitor-net
   mysql:
     container_name: mysql
     image: mysql
@@ -22,3 +25,5 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
+    networks:
+      - monitor-net
