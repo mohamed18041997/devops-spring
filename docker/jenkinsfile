@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+    environment {
+        registry = "hamzataoujouti/devops-spring"
+        registryCredential = 'dockerhub_id'
+        dockerImage = ''
+        dockerlatest = ''
+    }
+    stages {
+        stage('clone repo') {
+            steps {
+               git 'https://github.com/tajoutihamza/DevOps-Spring-boot.git'
+            }
+        }
+        stage('build code'){
+                steps{
+                   sh 'mvn clean compile -DskipTests'
+                }
+        }
+
+        stage('test code'){
+            steps{
+               sh 'mvn test'
+            }
+            post {
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps{
+                withSonarQubeEnv('SonarQube') {
+              sh "mvn clean verify sonar:sonar -Dsonar.projectKey=DevOps-project"
+            }
+          }
+        }
+
+        stage('package code'){
+            steps{
+               sh 'mvn package'
+            }
+            post {
+                    success {
+                        archiveArtifacts 'target/*.jar'
+                    }
+            }
+        }
+        stage('package deploy to nexus'){
+            steps{
+               sh 'mvn deploy -DskipTests'
+            }
+        }
+        stage('docker image build'){
+            steps{
+                script {
+                    dockerImage = docker.build registry + ":${env.BUILD_ID}"
+                    dockerlatest = docker.build registry + ":latest"
+                }
+            //   sh "docker build -t hamzataoujouti/devops-spring:${env.BUILD_ID} ."
+            //   sh "docker image tag hamzataoujouti/devops-spring:${env.BUILD_ID} hamzataoujouti/devops-spring:latest"
+            }
+        }
+        stage('docker image push'){
+            steps{
+              script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                        dockerlatest.push()
+                    }
+              }
+            //   sh "docker push hamzataoujouti/devops-spring:${env.BUILD_ID}"
+            //   sh 'docker push hamzataoujouti/devops-spring:latest'
+            }
+        }
+        stage('docker compose'){
+            steps{
+               sh 'docker compose up -d'
+            }
+        }
+    }
+}
