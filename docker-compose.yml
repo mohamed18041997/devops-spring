@@ -27,7 +27,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
-#    restart: always
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
 
@@ -37,12 +37,14 @@ services:
     ports:
       - 9000:9000
       - 9092:9092
+    restart: always
 
   nexus:
     container_name: nexus
     image: sonatype/nexus3
     ports:
       - 8081:8081
+    restart: always
 
   prometheus:
     container_name: prometheus
@@ -60,7 +62,7 @@ services:
     image: grafana/grafana:latest
     ports:
       - 3000:3000
-    #restart: always
+    restart: always
     volumes:
       - grafana_data:/var/lib/grafana
     depends_on:
@@ -71,7 +73,7 @@ services:
     image: prom/alertmanager:latest
     ports:
       - 9093:9093
-    #restart: always
+    restart: always
     volumes:
       - alertmanager_data:/alertmanager
     command:
