@@ -10,6 +10,10 @@ services:
       - 9000:9000
       - 9092:9092
     restart: always
+    volumes:
+      - sonar-data:/opt/sonarqube/data
+      - sonar-log:/opt/sonarqube/logs
+      - sonar-extension:/opt/sonarqube/extensions
     networks:
       - monitor-net
   nexus:
@@ -20,6 +24,8 @@ services:
     restart: always
     networks:
       - monitor-net
+    volumes:
+      - nexus-data:/nexus-data
 # docker run -d -p 8081:8081 --name nexuswitoutvars sonatype/nexus3 => curl http://localhost:8081/nexus/service/local/status
 
   prometheus:
@@ -55,9 +61,9 @@ services:
     restart: always
     volumes:
       - alertmanager_data:/alertmanager
-      - ./alermanager/config.yml:/etc/alertmanager/alertmanager.yml:rw,Z
+      - ./alermanager:/etc/alertmanager:rw,Z
     command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--config.file=/etc/alertmanager/config.yml'
     depends_on:
       - prometheus
     networks:
@@ -66,3 +72,7 @@ volumes:
   prometheus_data: {}
   grafana_data: {}
   alertmanager_data: {}
+  nexus-data: {}
+  sonar-data: {}
+  sonar-log: {}
+  sonar-extension: {}
