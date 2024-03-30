@@ -61,9 +61,9 @@ services:
     restart: always
     volumes:
       - alertmanager_data:/alertmanager
-      - ./alermanager:/etc/alertmanager
+#      - ./alermanager:/etc/alertmanager:rw,Z
     command:
-      - '--config.file=/etc/alertmanager/config.yml'
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
     depends_on:
       - prometheus
