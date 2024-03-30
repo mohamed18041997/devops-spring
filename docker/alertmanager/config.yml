@@ -16,6 +16,6 @@ route:
   group_interval: 1m
   repeat_interval: 5m
   routes:
-  - match:
-      alertname: PrometheusTargetMissing
+    - match:
+        alertname: PrometheusTargetMissing
   receiver: 'gmail-notifications'
