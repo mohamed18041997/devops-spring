@@ -3,7 +3,7 @@ global:
 receivers:
   - name: 'gmail-notifications'
     email_configs:
-      - to: hamza.taoujouti@esprit.tn
+      - to: mohamed.abdallah@esprit.tn
         from: wtravel721@gmail.com
         smarthost: smtp.gmail.com:587
         auth_username: wtravel721@gmail.com
