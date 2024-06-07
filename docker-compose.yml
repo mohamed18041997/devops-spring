@@ -6,7 +6,7 @@ services:
 
   spring:
     container_name: devops-app
-    image: hamzataoujouti/devops-spring:latest
+    image: mohamed1804/devops-spring:latest
     restart: always
     ports:
       - 8082:8082
